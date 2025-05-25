@@ -28,8 +28,22 @@ max_in_list([H|T], Max) :-
     (H > MaxTail -> Max = H ; Max = MaxTail).
 
 main :-
-    read(N),        
-    read(PList),    
+    # statistics(runtime, [StartTimeMs, _]),
+    # statistics(heapused, StartHeap),
+
+    read(N),
+    read(PList),
     all_depths(PList, N, Depths),
     max_in_list(Depths, Max),
     format("Count of groups: ~d~n", [Max]).
+
+    # statistics(runtime, [EndTimeMs, _]),
+    # statistics(heapused, EndHeap),
+
+    # TimeMs is EndTimeMs - StartTimeMs,
+    # TimeSec is TimeMs / 1000.0,
+    # MemUsedBytes is EndHeap - StartHeap,
+    # MemUsedMB is MemUsedBytes / (1024.0 * 1024.0),
+
+    # format("Time: ~2f seconds~n", [TimeSec]),
+    # format("Memory used (heap): ~2f MB~n", [MemUsedMB]).
