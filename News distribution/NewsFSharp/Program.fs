@@ -1,4 +1,5 @@
 ﻿open System
+open System.Diagnostics
 
 [<EntryPoint>]
 let main _argv =
@@ -12,6 +13,10 @@ let main _argv =
     let size = Array.create total 0             // Размеы компоненты связности с номером i
     
     let lines = [ for _ in 1..m -> Console.ReadLine() ] // Список всех строк ввода
+    
+    let sw = Stopwatch.StartNew()
+    let startMemory = GC.GetTotalMemory(true)
+    
     lines
     |> List.iteri (fun i line ->                // Перебираем элементы списка вместе с их индексами
         let tokens = line.Split() |> List.ofArray
@@ -51,5 +56,14 @@ let main _argv =
 
     process 0 0 []
     |> List.iter (printf "%d ")
+
+    let endMemory = GC.GetTotalMemory(true)
+    sw.Stop()
+
+    let elapsedSec = float sw.ElapsedMilliseconds / 1000.0
+    let usedMemoryMb = float (endMemory - startMemory) / 1024.0 / 1024.0
+
+    printfn "\nВремя выполнения: %.3f сек" elapsedSec
+    printfn "Использовано памяти: %.3f МБ" usedMemoryMb
 
     0 

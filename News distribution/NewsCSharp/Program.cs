@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 class Program
 {
@@ -42,7 +43,7 @@ class Program
         {
             string[] line = Console.ReadLine().Split();
             int k = int.Parse(line[0]);
-            
+
             // Создаем связи
             for (int j = 0; j < k; j++)
             {
@@ -51,6 +52,9 @@ class Program
                 g[i + n].Add(x);              // группа <-> x
             }
         }
+
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        long memoryBefore = GC.GetTotalMemory(true);
 
         for (int i = 0; i < n; i++)
         {
@@ -62,5 +66,15 @@ class Program
 
             Console.Write(siz[compontent[i]] + " ");
         }
+        
+        long memoryAfter = GC.GetTotalMemory(true);
+        stopwatch.Stop();
+
+        double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
+        double usedMB = (memoryAfter - memoryBefore) / (1024.0 * 1024.0);
+
+        Console.WriteLine();
+        Console.WriteLine($"Время выполнения: {elapsedSeconds:F3} сек");
+        Console.WriteLine($"Использовано памяти: {usedMB:F2} МБ");
     }
 }
