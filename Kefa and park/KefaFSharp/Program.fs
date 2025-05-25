@@ -1,4 +1,5 @@
 ﻿open System
+open System.Diagnostics
 
 let rec dfs (g: List<List<int>>) (cats: List<int>) m v prev cnt =
     if cnt > m then 0
@@ -30,6 +31,9 @@ let rec readEdges count =
 
 let edges = readEdges (n - 1)
 
+let sw = Stopwatch.StartNew()
+let startMemory = GC.GetTotalMemory(true)
+
 let g =
     let empty = List.init (n + 1) (fun _ -> [])
     edges
@@ -45,3 +49,12 @@ let startCnt = if List.head cats = 1 then 1 else 0
 
 let result = dfs g cats m 1 -1 startCnt
 printfn "%d" result
+
+let endMemory = GC.GetTotalMemory(true)
+sw.Stop()
+
+let elapsedSec = float sw.ElapsedMilliseconds / 1000.0
+let usedMemoryMb = float (endMemory - startMemory) / 1024.0 / 1024.0
+
+printfn "\nВремя выполнения: %.3f сек" elapsedSec
+printfn "Использовано памяти: %.3f МБ" usedMemoryMb
